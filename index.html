@@ -1,10 +1,1124 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Herbario Digital</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Herbario Digital OASIS</title>
+  
+  <!-- Fuentes Premium -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-primary: #0a0f0d;
+      --bg-secondary: #121a17;
+      --bg-card: rgba(18, 26, 23, 0.75);
+      --accent: #10b981;
+      --accent-glow: rgba(16, 185, 129, 0.35);
+      --accent-muted: #064e3b;
+      --text-primary: #f3f4f6;
+      --text-secondary: #9ca3af;
+      --text-muted: #6b7280;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(16, 185, 129, 0.4);
+      --glass: rgba(10, 15, 13, 0.7);
+      --shadow-premium: 0 20px 40px rgba(0, 0, 0, 0.5);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg-primary);
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, #111e1a 0%, var(--bg-primary) 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    header {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 4rem 2rem 2rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .header-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      padding: 0.5rem 1.5rem;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      border-radius: 50px;
+      color: var(--accent);
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(to right, #ffffff, #a7f3d0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.15rem;
+      max-width: 600px;
+      margin: 0 auto 3rem;
+      font-weight: 300;
+    }
+
+    /* Controles de búsqueda y filtros */
+    .controls {
+      max-width: 800px;
+      margin: 0 auto 4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      padding: 0 1rem;
+    }
+
+    .search-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      padding: 1.1rem 1.5rem 1.1rem 3.5rem;
+      border-radius: 16px;
+      color: var(--text-primary);
+      font-size: 1.05rem;
+      font-family: inherit;
+      transition: var(--transition);
+      box-shadow: var(--shadow-premium);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 1.25rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+      width: 20px;
+      height: 20px;
+      pointer-events: none;
+      transition: var(--transition);
+    }
+
+    .search-input:focus + .search-icon {
+      color: var(--accent);
+    }
+
+    .filter-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 0.6rem 1.5rem;
+      border-radius: 50px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 500;
+    }
+
+    .filter-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-primary);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .filter-btn.active {
+      background: var(--accent);
+      color: #000000;
+      border-color: var(--accent);
+      font-weight: 600;
+      box-shadow: 0 5px 15px var(--accent-glow);
+    }
+
+    /* Grid de Especies */
+    .species-grid {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem 6rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+
+    .species-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      overflow: hidden;
+      position: relative;
+      height: 400px;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: var(--shadow-premium);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .species-card:hover {
+      transform: translateY(-8px) scale(1.01);
+      border-color: var(--border-hover);
+      box-shadow: 0 20px 30px rgba(16, 185, 129, 0.12);
+    }
+
+    .card-bg-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      transition: var(--transition);
+      z-index: 1;
+    }
+
+    .species-card:hover .card-bg-image {
+      transform: scale(1.06);
+    }
+
+    .card-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, rgba(10, 15, 13, 0.1) 40%, rgba(10, 15, 13, 0.9) 100%);
+      z-index: 2;
+    }
+
+    .card-badge {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: rgba(10, 15, 13, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
+      padding: 0.4rem 0.8rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--accent);
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .card-badge.special {
+      left: 1.5rem;
+      right: auto;
+      color: #ffffff;
+      background: rgba(16, 185, 129, 0.9);
+      border-color: var(--accent);
+    }
+
+    .card-content {
+      position: relative;
+      z-index: 3;
+      padding: 2rem;
+    }
+
+    .card-family {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 0.35rem;
+      font-weight: 600;
+    }
+
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      margin-bottom: 0.25rem;
+      font-weight: 700;
+    }
+
+    .card-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-style: italic;
+      font-weight: 300;
+    }
+
+    /* Modal / Panel de Detalles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(5, 7, 6, 0.85);
+      backdrop-filter: blur(16px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: var(--transition);
+      padding: 2rem;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal-container {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      width: 100%;
+      max-width: 1100px;
+      max-height: 85vh;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
+      transform: scale(0.95) translateY(20px);
+      transition: var(--transition);
+    }
+
+    .modal-overlay.active .modal-container {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-sidebar {
+      background: rgba(10, 15, 13, 0.5);
+      border-right: 1px solid var(--border);
+      padding: 3rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-primary);
+      transition: var(--transition);
+      z-index: 10;
+    }
+
+    .modal-close-btn:hover {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: rgba(239, 68, 68, 0.4);
+      color: #ef4444;
+      transform: rotate(90deg);
+    }
+
+    .modal-family {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .modal-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    .modal-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      font-style: italic;
+      font-weight: 300;
+      margin-bottom: 2rem;
+    }
+
+    .modal-desc {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      font-weight: 300;
+      margin-bottom: 2rem;
+    }
+
+    .modal-gallery-area {
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    /* Pestañas para Categorías de Fotos (ej. Arenaria) */
+    .tabs-container {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      padding: 0.35rem;
+      border-radius: 12px;
+      width: fit-content;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .tab-btn:hover {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .tab-btn.active {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* Grid de Fotos de la Galería */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .gallery-item {
+      aspect-ratio: 1;
+      background-color: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .gallery-item:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .gallery-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: var(--transition);
+    }
+
+    .gallery-item:hover .gallery-img {
+      transform: scale(1.05);
+    }
+
+    /* Lightbox para ver a pantalla completa */
+    .lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(3, 5, 4, 0.98);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: var(--transition);
+    }
+
+    .lightbox.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .lightbox-img-wrapper {
+      max-width: 90%;
+      max-height: 85vh;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .lightbox-img {
+      max-width: 100%;
+      max-height: 80vh;
+      object-fit: contain;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9);
+      transform: scale(0.97);
+      transition: transform 0.3s ease;
+    }
+
+    .lightbox.active .lightbox-img {
+      transform: scale(1);
+    }
+
+    .lightbox-caption {
+      margin-top: 1.5rem;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      letter-spacing: 0.05em;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .lightbox-close:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: white;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      user-select: none;
+    }
+
+    .lightbox-nav:hover {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .lightbox-nav.prev {
+      left: 2rem;
+    }
+
+    .lightbox-nav.next {
+      right: 2rem;
+    }
+
+    /* Animaciones y Estados */
+    .fade-out {
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      position: absolute;
+      width: 0;
+      height: 0;
+      overflow: hidden;
+      margin: 0;
+      border: none;
+    }
+
+    /* Adaptabilidad */
+    @media (max-width: 992px) {
+      .modal-container {
+        grid-template-columns: 1fr;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+      .modal-sidebar {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding: 2rem;
+      }
+      .modal-gallery-area {
+        padding: 2rem;
+      }
+      h1 {
+        font-size: 2.75rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding: 2.5rem 1rem 1.5rem;
+      }
+      h1 {
+        font-size: 2.2rem;
+      }
+      .species-grid {
+        padding: 0 1rem 4rem;
+        grid-template-columns: 1fr;
+      }
+      .modal-overlay {
+        padding: 0.5rem;
+      }
+      .modal-container {
+        max-height: 98vh;
+        border-radius: 20px;
+      }
+      .lightbox-nav {
+        width: 44px;
+        height: 44px;
+      }
+      .lightbox-nav.prev {
+        left: 0.5rem;
+      }
+      .lightbox-nav.next {
+        right: 0.5rem;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h2>Herbario Digital OASIS</h2>
+
+  <header>
+    <div class="header-logo">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      Proyecto Botánico
+    </div>
+    <h1>Herbario Digital</h1>
+    <p class="subtitle">Catálogo interactivo de especies recolectadas y clasificadas en la expedición andina OASIS.</p>
+    
+    <div class="controls">
+      <div class="search-wrapper">
+        <input type="text" id="searchInput" class="search-input" placeholder="Buscar especie o familia (ej. Arenaria, Malvaceae)...">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </div>
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all">Todas</button>
+        <button class="filter-btn" data-filter="flores-folder">En carpeta "flores"</button>
+        <button class="filter-btn" data-filter="other">Otras especies</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="species-grid" id="speciesGrid">
+      <!-- Generado dinámicamente por JavaScript -->
+    </div>
+  </main>
+
+  <!-- Modal de Detalles -->
+  <div class="modal-overlay" id="speciesModal" onclick="closeModalOnOverlay(event)">
+    <div class="modal-container">
+      <button class="modal-close-btn" onclick="closeModal()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+      
+      <div class="modal-sidebar">
+        <div class="modal-family" id="modalFamily">FAMILIA</div>
+        <h2 class="modal-title" id="modalTitle">Especie</h2>
+        <div class="modal-subtitle" id="modalSubtitle">Nombre vulgar</div>
+        <p class="modal-desc" id="modalDesc">Descripción botánica detallada de la muestra recolectada, adaptaciones biológicas y notas de campo.</p>
+      </div>
+      
+      <div class="modal-gallery-area">
+        <div class="tabs-container" id="modalTabsContainer" style="display: none;">
+          <!-- Pestañas para Arenaria -->
+        </div>
+        <div class="gallery-grid" id="modalGalleryGrid">
+          <!-- Imágenes de la galería -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightbox para Pantalla Completa -->
+  <div class="lightbox" id="imageLightbox" onclick="closeLightboxOnOverlay(event)">
+    <button class="lightbox-close" onclick="closeLightbox()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+    <button class="lightbox-nav prev" onclick="navigateLightbox(-1)">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </button>
+    <div class="lightbox-img-wrapper">
+      <img src="" alt="" class="lightbox-img" id="lightboxImg">
+      <div class="lightbox-caption" id="lightboxCaption">Título de imagen</div>
+    </div>
+    <button class="lightbox-nav next" onclick="navigateLightbox(1)">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </button>
+  </div>
+
+  <script>
+    // Datos de la Especies del Herbario
+    const speciesData = [
+      {
+        id: "arenaria",
+        name: "Arenaria",
+        commonName: "Arenaria de los Andes",
+        family: "Caryophyllaceae",
+        description: "Planta herbácea de pequeña altura, adaptada a climas fríos y ambientes montañosos o arenosos. Posee flores de pétalos blancos muy definidos y tallos delgados pero resistentes.",
+        featuredImage: "flores/arenaria/Arenaria_principal/DSC_7448.jpg",
+        inFloresFolder: true,
+        hasParts: true,
+        parts: {
+          "Principal": [
+            "flores/arenaria/Arenaria_principal/DSC_7448.jpg",
+            "flores/arenaria/Arenaria_principal/DSC_7570.jpg",
+            "flores/arenaria/Arenaria_principal/DSC_8018.jpg",
+            "flores/arenaria/Arenaria_principal/IMG_0949.jpg"
+          ],
+          "Flor": [
+            "flores/arenaria/Arenaria_flor/IMG_1031.jpg",
+            "flores/arenaria/Arenaria_flor/IMG_1013.jpg",
+            "flores/arenaria/Arenaria_flor/20250114_133022.jpg"
+          ],
+          "Tallo": [
+            "flores/arenaria/Arenaria_tallo/20250117_104621.jpg",
+            "flores/arenaria/Arenaria_tallo/DSC_7390.jpg",
+            "flores/arenaria/Arenaria_tallo/DSC_7469.jpg"
+          ]
+        }
+      },
+      {
+        id: "azorella",
+        name: "Azorella",
+        commonName: "Llareta",
+        family: "Apiaceae",
+        description: "Planta compacta que forma densos cojines o alfombras de crecimiento extremadamente lento. Es característica del altiplano y las cumbres andinas, tolerando vientos secantes y temperaturas heladas extremas.",
+        featuredImage: "Azorella/Azorella.png",
+        inFloresFolder: false,
+        images: [
+          "Azorella/Azorella.png",
+          "Azorella/Azorella2.png",
+          "Azorella/Azorella3.png"
+        ]
+      },
+      {
+        id: "calandrinia",
+        name: "Calandrinia",
+        commonName: "Pata de guanaco",
+        family: "Montiaceae",
+        description: "Género de plantas suculentas con flores de colores vibrantes (fucsia, púrpura, amarillo) muy llamativas. Es típica de zonas áridas y florece espectacularmente durante el fenómeno del desierto florido.",
+        featuredImage: "Calandrinia/Calandrinia.png",
+        inFloresFolder: false,
+        images: [
+          "Calandrinia/Calandrinia.png",
+          "Calandrinia/Calandrinia2.png",
+          "Calandrinia/Calandrinia3.png"
+        ]
+      },
+      {
+        id: "calceolaria",
+        name: "Calceolaria",
+        commonName: "Capachito amarillo",
+        family: "Calceolariaceae",
+        description: "Conocida por sus flores singulares en forma de bolsa o zapatito inflado que sirve como mecanismo de polinización especializado, generalmente amarillas o rojas.",
+        featuredImage: "Calceolaria/Calceolaria.png",
+        inFloresFolder: false,
+        images: [
+          "Calceolaria/Calceolaria.png",
+          "Calceolaria/Calceolaria2.png",
+          "Calceolaria/Calceolaria3.png"
+        ]
+      },
+      {
+        id: "cristaria",
+        name: "Cristaria",
+        commonName: "Malvilla del desierto",
+        family: "Malvaceae",
+        description: "Planta rastrera o arbustiva con delicadas flores violáceas o rosadas. Crece en ambientes desérticos y semiáridos de la costa y el interior del norte de Chile.",
+        featuredImage: "Cristaria/Cristaria.png",
+        inFloresFolder: false,
+        images: [
+          "Cristaria/Cristaria.png",
+          "Cristaria/Cristaria2.png",
+          "Cristaria/Cristaria3.png"
+        ]
+      },
+      {
+        id: "erythranthe",
+        name: "Erythranthe",
+        commonName: "Berro amarillo",
+        family: "Phrymaceae",
+        description: "Destaca por sus flores tubulares de color amarillo intenso, a menudo con pequeñas pecas o manchas rojas en la garganta. Prefiere zonas húmedas, cerca de cursos de agua andinos.",
+        featuredImage: "Erythranthe/Erythranthe.png",
+        inFloresFolder: false,
+        images: [
+          "Erythranthe/Erythranthe.png",
+          "Erythranthe/Erythranthe2.png",
+          "Erythranthe/Erythranthe3.png"
+        ]
+      },
+      {
+        id: "gamocarpha",
+        name: "Gamocarpha",
+        commonName: "Gamocarpa",
+        family: "Calyceraceae",
+        description: "Género endémico de los Andes sudamericanos, caracterizado por sus inflorescencias compactas en cabezuela y su adaptación a condiciones de pedreros y laderas de alta montaña.",
+        featuredImage: "Gamocarpha/Gamocarpha.png",
+        inFloresFolder: false,
+        images: [
+          "Gamocarpha/Gamocarpha.png",
+          "Gamocarpha/Gamocarpha2.jpg",
+          "Gamocarpha/Gamocarpha3.jpg"
+        ]
+      },
+      {
+        id: "gayophytum",
+        name: "Gayophytum",
+        commonName: "Gayofito de la cordillera",
+        family: "Onagraceae",
+        description: "Pequeñas hierbas anuales con tallos sumamente delgados, hojas lineares y flores diminutas de color blanco o rosado, adaptadas a laderas secas de altitudes medias y altas.",
+        featuredImage: "Gayophytum/Gayophytum.png",
+        inFloresFolder: false,
+        images: [
+          "Gayophytum/Gayophytum.png",
+          "Gayophytum/Gayophytum2.png",
+          "Gayophytum/Gayophytum3.png"
+        ]
+      },
+      {
+        id: "kurzamra",
+        name: "Kurzamra",
+        commonName: "Kurzamra aromática",
+        family: "Lamiaceae",
+        description: "Género andino de arbustos enanos aromáticos con hojas compactas y flores pequeñas de color lila o blanquecino, comunes en suelos rocosos y expuestos del altiplano.",
+        featuredImage: "Kurzamra/Kurzamra.png",
+        inFloresFolder: false,
+        images: [
+          "Kurzamra/Kurzamra.png",
+          "Kurzamra/Kurzamra2.png",
+          "Kurzamra/Kurzamra3.png"
+        ]
+      },
+      {
+        id: "menonvillea",
+        name: "Menonvillea",
+        commonName: "Menonvilea silvestre",
+        family: "Brassicaceae",
+        description: "Planta adaptada a suelos arenosos y pedregosos de alta montaña. Destaca por su follaje glauco de apariencia coriácea y sus silicuas (frutos) aladas características.",
+        featuredImage: "Menonvillea/Menonvillea.png",
+        inFloresFolder: false,
+        images: [
+          "Menonvillea/Menonvillea.png",
+          "Menonvillea/Menonvillea2.png",
+          "Menonvillea/Menonvillea3.png"
+        ]
+      },
+      {
+        id: "nototriche",
+        name: "Nototriche",
+        commonName: "Nototriche de altura",
+        family: "Malvaceae",
+        description: "Plantas en roseta o cojín de gran altitud, con hermosas flores acopadas de colores que van desde el azul y violeta hasta el blanco, adaptadas al clima alpino extremo de la cordillera.",
+        featuredImage: "Nototriche/Nototriche.png",
+        inFloresFolder: false,
+        images: [
+          "Nototriche/Nototriche.png",
+          "Nototriche/Nototriche2.png",
+          "Nototriche/Nototriche3.png"
+        ]
+      },
+      {
+        id: "triglochin",
+        name: "Triglochin",
+        commonName: "Hierba de flecha de agua",
+        family: "Juncaginaceae",
+        description: "Planta palustre adaptada a suelos salinos y húmedos. Común en bofedales, humedales andinos y riberas de lagunas altiplánicas de alta concentración mineral.",
+        featuredImage: "Triglochin/Triglochin.JPG",
+        inFloresFolder: false,
+        images: [
+          "Triglochin/Triglochin.JPG",
+          "Triglochin/Triglochin2.png",
+          "Triglochin/Triglochin3.png"
+        ]
+      }
+    ];
+
+    let currentGalleryImages = [];
+    let currentLightboxIndex = 0;
+    let activeFilter = 'all';
+    let searchQuery = '';
+
+    // Elementos del DOM
+    const speciesGrid = document.getElementById('speciesGrid');
+    const searchInput = document.getElementById('searchInput');
+    const speciesModal = document.getElementById('speciesModal');
+    const imageLightbox = document.getElementById('imageLightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxCaption = document.getElementById('lightboxCaption');
+
+    // Inicialización de la Grid
+    function renderGrid() {
+      speciesGrid.innerHTML = '';
+      
+      const filteredData = speciesData.filter(species => {
+        // Filtrado por buscador
+        const matchesSearch = 
+          species.name.toLowerCase().includes(searchQuery) ||
+          species.commonName.toLowerCase().includes(searchQuery) ||
+          species.family.toLowerCase().includes(searchQuery);
+
+        // Filtrado por botones
+        let matchesButton = true;
+        if (activeFilter === 'flores-folder') {
+          matchesButton = species.inFloresFolder;
+        } else if (activeFilter === 'other') {
+          matchesButton = !species.inFloresFolder;
+        }
+
+        return matchesSearch && matchesButton;
+      });
+
+      if (filteredData.length === 0) {
+        speciesGrid.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 4rem 2rem; color: var(--text-secondary); font-size: 1.1rem; font-weight: 300;">
+            No se encontraron especies que coincidan con la búsqueda.
+          </div>
+        `;
+        return;
+      }
+
+      filteredData.forEach(species => {
+        // Calcular total de fotos
+        let totalPhotos = 0;
+        if (species.hasParts) {
+          totalPhotos = Object.values(species.parts).reduce((sum, list) => sum + list.length, 0);
+        } else {
+          totalPhotos = species.images.length;
+        }
+
+        const card = document.createElement('div');
+        card.className = 'species-card';
+        card.onclick = () => openSpeciesDetail(species.id);
+
+        const badgeHtml = species.inFloresFolder 
+          ? `<div class="card-badge special">📂 Carpeta Flores</div>`
+          : `<div class="card-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>${totalPhotos} fotos</div>`;
+
+        card.innerHTML = `
+          <div class="card-bg-image" style="background-image: url('${species.featuredImage}');"></div>
+          <div class="card-overlay"></div>
+          ${badgeHtml}
+          <div class="card-content">
+            <div class="card-family">${species.family}</div>
+            <h3 class="card-title">${species.name}</h3>
+            <div class="card-subtitle">${species.commonName}</div>
+          </div>
+        `;
+        
+        speciesGrid.appendChild(card);
+      });
+    }
+
+    // Buscador
+    searchInput.addEventListener('input', (e) => {
+      searchQuery = e.target.value.toLowerCase().trim();
+      renderGrid();
+    });
+
+    // Filtros
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeFilter = btn.getAttribute('data-filter');
+        renderGrid();
+      });
+    });
+
+    // Abrir Modal de Detalles de Especie
+    function openSpeciesDetail(speciesId) {
+      const species = speciesData.find(s => s.id === speciesId);
+      if (!species) return;
+
+      document.getElementById('modalFamily').textContent = species.family;
+      document.getElementById('modalTitle').textContent = species.name;
+      document.getElementById('modalSubtitle').textContent = species.commonName;
+      document.getElementById('modalDesc').textContent = species.description;
+
+      const tabsContainer = document.getElementById('modalTabsContainer');
+      const galleryGrid = document.getElementById('modalGalleryGrid');
+      
+      galleryGrid.innerHTML = '';
+      
+      if (species.hasParts) {
+        // Estructura especial con pestañas (Arenaria)
+        tabsContainer.style.display = 'flex';
+        tabsContainer.innerHTML = '';
+        
+        let firstTab = true;
+        Object.keys(species.parts).forEach(partName => {
+          const tabBtn = document.createElement('button');
+          tabBtn.className = `tab-btn ${firstTab ? 'active' : ''}`;
+          tabBtn.textContent = partName;
+          tabBtn.onclick = () => {
+            document.querySelectorAll('.tab-btn').forEach(tb => tb.classList.remove('active'));
+            tabBtn.classList.add('active');
+            renderGalleryList(species.parts[partName], species.name + " (" + partName + ")");
+          };
+          tabsContainer.appendChild(tabBtn);
+          
+          if (firstTab) {
+            renderGalleryList(species.parts[partName], species.name + " (" + partName + ")");
+            firstTab = false;
+          }
+        });
+      } else {
+        // Estructura general de fotos
+        tabsContainer.style.display = 'none';
+        renderGalleryList(species.images, species.name);
+      }
+
+      speciesModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function renderGalleryList(imageList, titlePrefix) {
+      const galleryGrid = document.getElementById('modalGalleryGrid');
+      galleryGrid.innerHTML = '';
+      currentGalleryImages = imageList.map(src => ({
+        src: src,
+        caption: titlePrefix
+      }));
+
+      imageList.forEach((imgSrc, index) => {
+        const item = document.createElement('div');
+        item.className = 'gallery-item';
+        item.onclick = () => openLightbox(index);
+        item.innerHTML = `<img src="${imgSrc}" alt="${titlePrefix}" class="gallery-img" loading="lazy">`;
+        galleryGrid.appendChild(item);
+      });
+    }
+
+    // Cerrar Modal
+    function closeModal() {
+      speciesModal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function closeModalOnOverlay(e) {
+      if (e.target === speciesModal) {
+        closeModal();
+      }
+    }
+
+    // Lightbox
+    function openLightbox(index) {
+      currentLightboxIndex = index;
+      const imgData = currentGalleryImages[index];
+      
+      lightboxImg.src = imgData.src;
+      lightboxImg.alt = imgData.caption;
+      lightboxCaption.textContent = `${imgData.caption} — Foto ${index + 1} de ${currentGalleryImages.length}`;
+      
+      imageLightbox.classList.add('active');
+    }
+
+    function closeLightbox() {
+      imageLightbox.classList.remove('active');
+    }
+
+    function closeLightboxOnOverlay(e) {
+      if (e.target === imageLightbox || e.target.classList.contains('lightbox-img-wrapper')) {
+        closeLightbox();
+      }
+    }
+
+    function navigateLightbox(direction) {
+      currentLightboxIndex = (currentLightboxIndex + direction + currentGalleryImages.length) % currentGalleryImages.length;
+      const imgData = currentGalleryImages[currentLightboxIndex];
+      
+      lightboxImg.src = imgData.src;
+      lightboxImg.alt = imgData.caption;
+      lightboxCaption.textContent = `${imgData.caption} — Foto ${currentLightboxIndex + 1} de ${currentGalleryImages.length}`;
+    }
+
+    // Soporte Teclado para Modales
+    document.addEventListener('keydown', (e) => {
+      if (imageLightbox.classList.contains('active')) {
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowRight') navigateLightbox(1);
+        if (e.key === 'ArrowLeft') navigateLightbox(-1);
+      } else if (speciesModal.classList.contains('active')) {
+        if (e.key === 'Escape') closeModal();
+      }
+    });
+
+    // Render Inicial
+    renderGrid();
+  </script>
 </body>
 </html>
