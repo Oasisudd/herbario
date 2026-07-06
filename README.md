@@ -1,2 +1,0 @@
-# herbario
-info herbario digital
