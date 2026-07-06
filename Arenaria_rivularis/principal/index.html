@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Arenaria rivularis - Principal</title>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --primary: #10b981;
+            --primary-hover: #34d399;
+        }
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 40px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(to right, #10b981, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+        .breadcrumbs {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+        .breadcrumbs a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumbs a:hover {
+            color: var(--primary-hover);
+        }
+        .species-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        .species-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .species-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(16, 185, 129, 0.4);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+        .species-card h2 {
+            margin: 0 0 10px 0;
+            font-size: 20px;
+            font-style: italic;
+            font-weight: 600;
+        }
+        .species-card p {
+            color: var(--text-muted);
+            margin: 0 0 20px 0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .section-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 8px 16px;
+            border-radius: 9999px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-transform: capitalize;
+        }
+        .btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #0f172a;
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .gallery-item {
+            position: relative;
+            aspect-ratio: 4 / 3;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            background: #000;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .gallery-item:hover img {
+            transform: scale(1.08);
+        }
+        .gallery-item-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            padding: 15px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .gallery-item:hover .gallery-item-info {
+            opacity: 1;
+        }
+        .gallery-item-info span {
+            font-size: 12px;
+            color: #fff;
+        }
+        footer {
+            background: rgba(15, 23, 42, 0.9);
+            border-top: 1px solid var(--border-color);
+            padding: 20px 40px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        
+        /* Lightbox styles */
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+        }
+        .lightbox.active {
+            display: flex;
+        }
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 85%;
+            position: relative;
+        }
+        .lightbox img {
+            max-width: 100%;
+            max-height: 85vh;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            font-weight: 300;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .lightbox-close:hover {
+            color: var(--primary);
+        }
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 40px;
+            font-weight: 300;
+            cursor: pointer;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            user-select: none;
+            transition: all 0.2s;
+        }
+        .lightbox-nav:hover {
+            background: var(--primary);
+            color: #0f172a;
+        }
+        .lightbox-prev { left: 30px; }
+        .lightbox-next { right: 30px; }
+        .lightbox-caption {
+            position: absolute;
+            bottom: -40px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            font-size: 14px;
+        }
+    </style>
+
+</head>
+<body>
+    <header>
+        <h1>Herbario Digital - Altoandino</h1>
+        <a href="../../" class="btn">Volver al Inicio</a>
+    </header>
+    <div class="container">
+        <div class="breadcrumbs">
+            <a href="../../">Inicio</a> &gt; <span>Arenaria rivularis</span> &gt; <span>Principal</span>
+        </div>
+        <h2 style="font-size: 32px; font-style: italic; margin-bottom: 10px;">Arenaria rivularis</h2>
+        <p style="color: var(--text-muted); margin-bottom: 40px; font-size: 16px;">Sección: Principal (8 imágenes)</p>
+        
+        <div class="gallery-grid">
+    
+            <div class="gallery-item" data-src="Copia de IMG_1087.JPG" data-name="IMG 1087" onclick="openLightbox(0)">
+                <img src="Copia de IMG_1087.JPG" alt="IMG 1087" loading="lazy">
+                <div class="gallery-item-info">
+                    <span>IMG 1087</span>
+                </div>
+            </div>
+        
+            <div class="gallery-item" data-src="Copia de IMG_1088.JPG" data-name="IMG 1088" onclick="openLightbox(1)">
+                <img src="Copia de IMG_1088.JPG" alt="IMG 1088" loading="lazy">
+                <div class="gallery-item-info">
+                    <span>IMG 1088</span>
+                </div>
+            </div>
+        
+            <div class="gallery-item" data-src="IMG_0949.JPG" data-name="IMG 0949" onclick="openLightbox(2)">
+                <img src="IMG_0949.JPG" alt="IMG 0949" loading="lazy">
+                <div class="gallery-item-info">
+                    <span>IMG 0949</span>
+                </div>
+            </div>
+        
+            <div class="gallery-item" data-src="IMG_1625.JPG" data-name="IMG 1625" onclick="openLightbox(3)">
+                <img src="IMG_1625.JPG" alt="IMG 1625" loading="lazy">
+                <div class="gallery-item-info">
+                    <span>IMG 1625</span>
+                </div>
+            </div>
+        
+            <div class="gallery-item" data-src="IMG_1626.JPG" data-name="IMG 1626" onclick="openLightbox(4)">
+                <img src="IMG_1626.JPG" alt="IMG 1626" loading="lazy">
+                <div class="gallery-item-info">
+                    <span>IMG 1626</span>
+                </div>
+            </div>
+        
+            <div class="gallery-item" data-src="IMG_1627.JPG" data-name="IMG 1627" onclick="openLightbox(5)">
+                <img src="IMG_1627.JPG" alt="IMG 1627" loading="lazy">
+                <div class="gallery-item-info">
+                    <span>IMG 1627</span>
+                </div>
+            </div>
+        
+            <div class="gallery-item" data-src="IMG_1628.JPG" data-name="IMG 1628" onclick="openLightbox(6)">
+                <img src="IMG_1628.JPG" alt="IMG 1628" loading="lazy">
+                <div class="gallery-item-info">
+                    <span>IMG 1628</span>
+                </div>
+            </div>
+        
+            <div class="gallery-item" data-src="IMG_1629.JPG" data-name="IMG 1629" onclick="openLightbox(7)">
+                <img src="IMG_1629.JPG" alt="IMG 1629" loading="lazy">
+                <div class="gallery-item-info">
+                    <span>IMG 1629</span>
+                </div>
+            </div>
+        
+        </div>
+    </div>
+    <footer>
+        &copy; 2026 Herbario Digital - Proyecto ANILLO ATE 240015
+    </footer>
+    
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <span class="lightbox-nav lightbox-prev" onclick="prevImage(event)">&lt;</span>
+        <span class="lightbox-nav lightbox-next" onclick="nextImage(event)">&gt;</span>
+        <div class="lightbox-content">
+            <img id="lightbox-img" src="" alt="Ampliada">
+            <div id="lightbox-caption" class="lightbox-caption"></div>
+        </div>
+    </div>
+    <script>
+        let images = [];
+        let currentIndex = 0;
+        
+        function initGallery() {
+            const items = document.querySelectorAll('.gallery-item');
+            images = Array.from(items).map(item => ({
+                src: item.getAttribute('data-src'),
+                name: item.getAttribute('data-name')
+            }));
+        }
+        
+        function openLightbox(index) {
+            currentIndex = index;
+            const img = document.getElementById('lightbox-img');
+            const caption = document.getElementById('lightbox-caption');
+            img.src = images[currentIndex].src;
+            caption.innerText = images[currentIndex].name;
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        
+        function prevImage(e) {
+            e.stopPropagation();
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            openLightbox(currentIndex);
+        }
+        
+        function nextImage(e) {
+            e.stopPropagation();
+            currentIndex = (currentIndex + 1) % images.length;
+            openLightbox(currentIndex);
+        }
+        
+        document.addEventListener('keydown', function(e) {
+            const lb = document.getElementById('lightbox');
+            if (lb.classList.contains('active')) {
+                if (e.key === 'Escape') closeLightbox();
+                if (e.key === 'ArrowLeft') prevImage(e);
+                if (e.key === 'ArrowRight') nextImage(e);
+            }
+        });
+        
+        window.onload = initGallery;
+    </script>
+
+</body>
+</html>
+    
