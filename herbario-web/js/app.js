@@ -93,12 +93,31 @@ function screen(html) {
   $app.innerHTML = html;
 }
 
+function bottomNavHtml(active) {
+  const items = [
+    { key: "inicio", href: "#/", icon: "🏠", label: "Inicio" },
+    { key: "especies", href: "#/catalogo", icon: "🌿", label: "Especies" },
+    { key: "paisajes", href: "#/paisajes", icon: "🌎", label: "Paisajes" },
+  ];
+  return `<nav class="bottom-nav">
+    ${items
+      .map(
+        (it) => `<a class="bottom-nav-item ${it.key === active ? "active" : ""}" href="${it.href}">
+          <span class="nav-icon">${it.icon}</span><span>${it.label}</span>
+        </a>`
+      )
+      .join("")}
+  </nav>`;
+}
+
 // ================= INTRO =================
 route("/", () => {
   const hero = DATA.paisajeGlobalImages[0];
   screen(`
     <div class="intro-header">
-      <img class="oasis-logo" src="assets/oasis-logo.png" alt="OASIS">
+      <a class="logo-link" href="https://oasisudd.github.io/observatorio/index3.html" target="_blank" rel="noopener" aria-label="Ir al Observatorio OASIS">
+        <img class="oasis-logo" src="assets/oasis-logo.png" alt="OASIS">
+      </a>
       <h1>Herbario Digital</h1>
       <p>Bofedales Altoandinos</p>
     </div>
@@ -144,6 +163,7 @@ route("/", () => {
         <a class="footer-anid" href="https://anid.cl/" target="_blank" rel="noopener"><img src="assets/logos/anid.png" alt="ANID"></a>
       </div>
     </div>
+    ${bottomNavHtml("inicio")}
   `);
 });
 
@@ -164,7 +184,9 @@ function renderCatalogo(search) {
 
   screen(`
     <div class="catalog-header">
-      <img class="oasis-logo" src="assets/oasis-logo.png" alt="OASIS">
+      <a class="logo-link" href="https://oasisudd.github.io/observatorio/index3.html" target="_blank" rel="noopener" aria-label="Ir al Observatorio OASIS">
+        <img class="oasis-logo" src="assets/oasis-logo.png" alt="OASIS">
+      </a>
       <div class="catalog-header-row">
         <div>
           <h1>Herbario</h1>
@@ -181,6 +203,7 @@ function renderCatalogo(search) {
       </div>
     </div>
     <div class="species-list" id="species-list"></div>
+    ${bottomNavHtml("especies")}
   `);
 
   const $list = document.getElementById("species-list");
@@ -563,6 +586,7 @@ route("/paisajes", () => {
       <p>Los humedales altoandinos se ordenan a lo largo de un gradiente hídrico-salino. Explora los tres tipos de paisaje y las especies que los habitan.</p>
     </div>
     <div class="paisajes-list">${cards}</div>
+    ${bottomNavHtml("paisajes")}
   `);
 });
 
