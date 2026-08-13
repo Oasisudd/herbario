@@ -4,8 +4,13 @@
 const DATA = window.HERBARIO_DATA;
 const $app = document.getElementById("app");
 
-const PAISAJE_ICONS = { water: "💧", sprout: "🌱", grass: "🌾" };
-const paisajeIcon = (id) => PAISAJE_ICONS[DATA.paisajes.find((p) => p.id === id)?.icon] || "🌿";
+const PAISAJE_ICONS = {
+  water: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69s5 5.6 8 10.36a8 8 0 1 1-16 0c3-4.76 8-10.36 8-10.36Z"/></svg>`,
+  sprout: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c0-4.4-1.8-6.4-4.5-8C3.2 10.8 2 8.8 2 6c3 0 5.5 1.5 7 4"/><path d="M14 20c0-6 2-8.5 6-10-1-4-4-6-9-6-.5 3 .5 5.5 2 7.5"/></svg>`,
+  grass: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 20V10c0-2 1-4 3-4"/><path d="M10 20v-6c0-3 1.5-6 4-6"/><path d="M14 20V8c0-2.5 1.5-5 4-5"/></svg>`,
+};
+const DEFAULT_PAISAJE_ICON = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>`;
+const paisajeIcon = (id) => PAISAJE_ICONS[DATA.paisajes.find((p) => p.id === id)?.icon] || DEFAULT_PAISAJE_ICON;
 
 function getPaisaje(id) {
   return DATA.paisajes.find((p) => p.id === id);
@@ -74,6 +79,7 @@ window.addEventListener("DOMContentLoaded", renderRoute);
 
 // ---------------- Icons (inline SVG, minimal set) ----------------
 const ICONS = {
+  home: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
   back: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>`,
   chevronRight: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>`,
   chevronDown: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`,
@@ -95,9 +101,9 @@ function screen(html) {
 
 function bottomNavHtml(active) {
   const items = [
-    { key: "inicio", href: "#/", icon: "🏠", label: "Inicio" },
-    { key: "especies", href: "#/catalogo", icon: "🌿", label: "Especies" },
-    { key: "paisajes", href: "#/paisajes", icon: "🌎", label: "Paisajes" },
+    { key: "inicio", href: "#/", icon: ICONS.home, label: "Inicio" },
+    { key: "especies", href: "#/catalogo", icon: ICONS.leaf, label: "Especies" },
+    { key: "paisajes", href: "#/paisajes", icon: ICONS.earth, label: "Paisajes" },
   ];
   return `<nav class="bottom-nav">
     ${items
@@ -209,7 +215,7 @@ function renderCatalogo(search) {
   const $list = document.getElementById("species-list");
   if (filtered.length === 0) {
     $list.innerHTML = `<div class="empty-state">
-      <div class="empty-icon">🌿</div>
+      <div class="empty-icon">${ICONS.leaf}</div>
       <h3>Sin resultados</h3>
       <p>Intenta con otro nombre o familia</p>
     </div>`;
@@ -564,7 +570,7 @@ route("/paisajes", () => {
           <div class="paisaje-card-text">
             <h3>${esc(p.name)}</h3>
             <p>${esc(p.tagline)}</p>
-            ${count ? `<div class="paisaje-card-meta">🌿 ${count} ${count === 1 ? "especie asociada" : "especies asociadas"}</div>` : ""}
+            ${count ? `<div class="paisaje-card-meta">${ICONS.leaf} ${count} ${count === 1 ? "especie asociada" : "especies asociadas"}</div>` : ""}
           </div>
           ${ICONS.chevronRight}
         </div>
