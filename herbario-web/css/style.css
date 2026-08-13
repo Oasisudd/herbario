@@ -1,0 +1,391 @@
+:root {
+  --text: #343b4d;
+  --tint: #00a99d;
+  --background: #ffffff;
+  --foreground: #343b4d;
+  --card: #ffffff;
+  --card-foreground: #343b4d;
+  --primary: #00a99d;
+  --primary-foreground: #ffffff;
+  --secondary: #f0f0f0;
+  --secondary-foreground: #343b4d;
+  --muted: #f5f5f5;
+  --muted-foreground: #6b7589;
+  --accent: #a98743;
+  --accent-foreground: #ffffff;
+  --highlight: #ff7bac;
+  --highlight-foreground: #ffffff;
+  --border: #e8e8e8;
+  --radius: 12px;
+  --maxw: 720px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; display: block; }
+
+a { color: inherit; text-decoration: none; }
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+#app {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  min-height: 100vh;
+  background: var(--background);
+  position: relative;
+  box-shadow: 0 0 40px rgba(0,0,0,0.06);
+}
+
+@media (min-width: 760px) {
+  body { background: #eef0f2; }
+  #app { min-height: 100vh; }
+}
+
+/* ---------- Header / topbar ---------- */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--background);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+.topbar .back-btn, .topbar .icon-box {
+  width: 38px;
+  height: 38px;
+  border-radius: 20px;
+  background: var(--secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--primary);
+}
+.topbar .icon-box { border-radius: 12px; }
+.topbar .back-btn:active { opacity: 0.7; }
+.topbar-center { flex: 1; min-width: 0; }
+.topbar-title { font-size: 15px; font-weight: 700; color: var(--foreground); margin: 0; }
+.topbar-sub { font-size: 12px; color: var(--muted-foreground); margin: 0; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ---------- Intro screen ---------- */
+.intro-header {
+  padding: 44px 24px 20px;
+  text-align: center;
+}
+.intro-header img.oasis-logo { height: 24px; margin: 0 auto 18px; }
+.intro-header h1 {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--primary);
+  margin: 0;
+}
+.intro-header p { font-size: 15px; color: var(--muted-foreground); margin: 2px 0 0; }
+
+.pano-wrap {
+  width: 100%;
+  aspect-ratio: 3/2;
+  background: var(--muted);
+  overflow: hidden;
+}
+.pano-wrap img { width: 100%; height: 100%; object-fit: cover; }
+
+.intro-body { padding: 28px 24px 0; }
+.intro-body h2 { font-size: 20px; font-weight: 700; margin: 0 0 10px; }
+.intro-body p { font-size: 15px; line-height: 23px; color: var(--muted-foreground); margin: 0 0 16px; }
+
+.nav-button {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: 14px;
+  margin-top: 12px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  width: 100%;
+  text-align: left;
+}
+.nav-button.secondary {
+  background: var(--secondary);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+}
+.nav-button .icon { font-size: 20px; flex-shrink: 0; }
+.nav-button .nav-title { font-size: 17px; font-weight: 600; display: block; }
+.nav-button .nav-subtitle { font-size: 13px; margin-top: 1px; display: block; opacity: 0.9; }
+.nav-button .chevron { margin-left: auto; }
+
+.footer {
+  margin-top: 36px;
+  border-top: 1px solid var(--border);
+  padding: 22px 20px 32px;
+}
+.footer-text { font-size: 12px; line-height: 18px; text-align: center; color: var(--muted-foreground); font-weight: 500; margin: 0 0 16px; }
+.footer-panel {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+}
+.footer-logos-left { flex: 1; display: flex; flex-direction: column; gap: 14px; }
+.footer-logo-row { display: flex; align-items: center; gap: 12px; }
+.footer-logo-row img { flex: 1; height: 26px; object-fit: contain; }
+.footer-anid img { width: 64px; height: 58px; object-fit: contain; }
+
+/* ---------- Catalogo screen ---------- */
+.catalog-header { padding: 20px 20px 14px; border-bottom: 1px solid var(--border); }
+.catalog-header img.oasis-logo { height: 22px; margin-bottom: 16px; }
+.catalog-header-row { display: flex; align-items: flex-end; justify-content: space-between; }
+.catalog-header-row h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; margin: 0; color: var(--primary); }
+.catalog-header-row p { font-size: 13px; color: var(--muted-foreground); margin: 2px 0 0; }
+
+.search-wrap { padding: 10px 16px; border-bottom: 1px solid var(--border); }
+.search-bar {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--muted); border: 1px solid var(--border);
+  border-radius: 12px; padding: 10px 12px;
+}
+.search-bar input {
+  border: none; background: none; outline: none; flex: 1;
+  font-size: 15px; color: var(--foreground); font-family: inherit;
+}
+.search-bar .clear-btn { color: var(--muted-foreground); font-size: 16px; }
+
+.species-list { padding: 12px 16px 20px; display: flex; flex-direction: column; gap: 10px; }
+
+.species-card {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+  background: var(--card);
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+.species-card:active { opacity: 0.85; }
+.species-card .card-image {
+  margin: -16px -16px 12px;
+  height: 160px;
+  background: var(--muted);
+  object-fit: cover;
+  width: calc(100% + 32px);
+}
+.card-header { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+.badge {
+  padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 600;
+  letter-spacing: 0.3px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.badge.family { background: var(--secondary); color: var(--primary); }
+.badge.common { background: var(--highlight); color: var(--highlight-foreground); font-weight: 500; }
+
+.sci-name { font-size: 18px; font-weight: 600; font-style: italic; margin: 0 0 2px; padding-right: 32px; }
+.authority { font-size: 12px; color: var(--muted-foreground); margin: 0 0 10px; }
+
+.card-footer { display: flex; flex-direction: column; gap: 6px; }
+.info-row { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--muted-foreground); }
+.distribution-row { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+.region-chip { background: var(--muted); border-radius: 4px; padding: 2px 6px; font-size: 11px; color: var(--muted-foreground); font-weight: 500; }
+.more-text { font-size: 11px; color: var(--muted-foreground); }
+
+.chevron-container {
+  position: absolute; right: 14px; top: 50%; margin-top: -14px;
+  width: 28px; height: 28px; border-radius: 20px; background: var(--secondary);
+  display: flex; align-items: center; justify-content: center; color: var(--primary);
+}
+
+.empty-state { text-align: center; padding: 80px 20px; color: var(--muted-foreground); }
+.empty-state .empty-icon { font-size: 48px; margin-bottom: 10px; }
+.empty-state h3 { font-size: 18px; font-weight: 600; color: var(--foreground); margin: 0 0 6px; }
+
+/* ---------- Species detail ---------- */
+.hero-section { padding: 20px; border-bottom: 1px solid var(--border); }
+.common-tag {
+  display: inline-block; background: var(--highlight); color: var(--highlight-foreground);
+  padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; letter-spacing: 0.3px; margin-bottom: 10px;
+}
+.hero-name { font-size: 25px; font-weight: 700; font-style: italic; line-height: 32px; margin: 0 0 4px; }
+.hero-authority { font-size: 13px; color: var(--muted-foreground); margin: 0 0 14px; }
+
+.hero-photo-wrap { position: relative; margin-bottom: 14px; border-radius: 14px; overflow: hidden; border: 1px solid var(--border); }
+.hero-photo-wrap img { width: 100%; aspect-ratio: 4/3; object-fit: cover; background: #0000000d; }
+.photo-count-badge {
+  position: absolute; top: 10px; right: 10px; display: flex; align-items: center; gap: 4px;
+  background: var(--primary); color: var(--primary-foreground); padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 600;
+}
+
+.hero-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.hero-badge {
+  display: flex; align-items: center; gap: 6px; background: var(--secondary); border-radius: 8px;
+  padding: 6px 10px; font-size: 13px; font-weight: 500;
+}
+
+.distribution-block { margin-bottom: 6px; }
+.distribution-label-row { display: flex; align-items: center; justify-content: space-between; }
+.distribution-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted-foreground); }
+.distribution-link { display: flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; color: var(--primary); }
+.distribution-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.dist-chip {
+  padding: 4px 8px; border: 1px solid var(--border); border-radius: 6px; font-size: 12px; font-weight: 500; background: var(--muted);
+}
+
+.paisajes-block { margin-top: 16px; }
+.paisajes-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted-foreground); margin-bottom: 8px; }
+.paisajes-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.paisaje-chip {
+  display: flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 999px; border: 1px solid; font-size: 13px; font-weight: 600;
+}
+
+.photos-section { margin: 16px 0; overflow-x: auto; }
+.photos-row { display: flex; gap: 12px; padding: 0 16px; }
+.photo-card {
+  width: 170px; flex-shrink: 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--card);
+}
+.photo-card img { width: 100%; height: 120px; object-fit: cover; background: #0000000d; }
+.photo-card-footer { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; }
+.photo-card-label { font-size: 13px; font-weight: 600; }
+.photo-card-count { font-size: 11px; color: var(--muted-foreground); display: flex; align-items: center; gap: 3px; }
+
+.tab-bar {
+  display: flex; flex-wrap: wrap; padding: 4px; margin: 0 16px 14px; background: var(--muted); border-radius: 12px;
+}
+.tab-item {
+  width: 50%; text-align: center; padding: 10px; border-radius: 10px; font-size: 13px; color: var(--muted-foreground);
+}
+.tab-item.active { background: var(--card); color: var(--primary); font-weight: 600; }
+
+.tab-content { padding: 0 16px; }
+.section-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
+.section-title { font-size: 15px; font-weight: 700; margin: 0 0 12px; color: var(--primary); }
+
+.taxonomy-row { display: flex; padding: 10px 0; border-bottom: 1px solid var(--border); gap: 12px; }
+.taxonomy-row:last-child { border-bottom: none; }
+.taxonomy-label { font-size: 13px; font-weight: 500; width: 110px; flex-shrink: 0; color: var(--muted-foreground); }
+.taxonomy-value { font-size: 13px; flex: 1; font-style: italic; }
+
+.bullet-row { display: flex; gap: 10px; margin-top: 8px; align-items: flex-start; }
+.bullet-row:first-child { margin-top: 0; }
+.bullet-dot { width: 6px; height: 6px; border-radius: 3px; background: var(--primary); margin-top: 6px; flex-shrink: 0; }
+.bullet-text { font-size: 14px; line-height: 22px; flex: 1; }
+
+.ecology-text { font-size: 14px; line-height: 22px; margin: 0 0 16px; }
+
+.map-button {
+  margin-top: 6px; padding: 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--secondary); display: block; width: 100%; text-align: left;
+}
+.map-button-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.map-button-title-row { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--primary); }
+.eco-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.eco-chip { padding: 5px 10px; border-radius: 6px; background: var(--card); font-size: 13px; font-weight: 600; color: var(--primary); }
+
+.references-block { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border); }
+.references-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted-foreground); margin: 0 0 10px; }
+.reference-row { display: flex; gap: 6px; margin-bottom: 8px; align-items: flex-start; font-size: 12px; line-height: 17px; color: var(--muted-foreground); }
+
+.ficha-link {
+  display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border);
+  background: var(--secondary); margin: 8px 16px 0; font-size: 14px; font-weight: 600; color: var(--primary);
+}
+.ficha-link .chevron { margin-left: auto; color: var(--muted-foreground); }
+
+/* ---------- Paisajes list ---------- */
+.paisajes-intro { padding: 0 16px; margin-bottom: 4px; }
+.paisajes-intro img { width: 100%; height: 150px; object-fit: cover; border-radius: 14px; margin-bottom: 12px; background: var(--muted); }
+.paisajes-intro p { font-size: 14px; line-height: 21px; color: var(--muted-foreground); margin: 0 0 4px; }
+
+.paisajes-list { padding: 14px 16px 20px; display: flex; flex-direction: column; gap: 12px; }
+.paisaje-card { border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--card); display: block; }
+.paisaje-card img.cover { width: 100%; height: 150px; object-fit: cover; background: var(--muted); }
+.paisaje-card-body { display: flex; align-items: center; gap: 12px; padding: 14px; }
+.paisaje-card-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+.paisaje-card-text { flex: 1; min-width: 0; }
+.paisaje-card-text h3 { font-size: 17px; font-weight: 700; margin: 0; }
+.paisaje-card-text p { font-size: 13px; color: var(--muted-foreground); margin: 2px 0 0; line-height: 18px; }
+.paisaje-card-meta { display: flex; align-items: center; gap: 5px; margin-top: 6px; font-size: 12px; font-weight: 500; color: var(--muted-foreground); }
+
+/* ---------- Paisaje detail ---------- */
+.paisaje-hero { width: 100%; height: 220px; object-fit: cover; background: var(--muted); }
+.paisaje-body { padding: 18px 20px 24px; }
+.title-tag {
+  display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; margin-bottom: 12px; font-size: 12px; font-weight: 600; letter-spacing: 0.3px;
+}
+.paisaje-body h1 { font-size: 27px; font-weight: 700; letter-spacing: -0.5px; margin: 0 0 4px; }
+.paisaje-tagline { font-size: 15px; line-height: 21px; color: var(--muted-foreground); margin: 0 0 18px; }
+.paisaje-body p.para { font-size: 15px; line-height: 24px; margin: 0 0 16px; }
+
+.subtype-card { padding: 14px; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px; background: var(--card); }
+.subtype-card h4 { font-size: 14px; font-weight: 600; margin: 0 0 6px; }
+.subtype-card p { font-size: 14px; line-height: 22px; color: var(--muted-foreground); margin: 0; }
+
+.gallery-section { margin: 8px -20px 0; }
+.gallery-row { display: flex; gap: 12px; padding: 0 20px; overflow-x: auto; }
+.gallery-row img { width: 240px; height: 170px; object-fit: cover; border-radius: 12px; border: 1px solid var(--border); flex-shrink: 0; background: var(--muted); }
+
+.paisaje-species-row {
+  display: flex; align-items: center; gap: 12px; padding: 10px; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px; background: var(--card);
+}
+.paisaje-species-row img { width: 52px; height: 52px; border-radius: 10px; object-fit: cover; background: var(--muted); flex-shrink: 0; }
+.paisaje-species-info { flex: 1; min-width: 0; }
+.paisaje-species-info .name { font-size: 15px; font-weight: 600; font-style: italic; }
+.paisaje-species-info .common { font-size: 13px; color: var(--muted-foreground); margin-top: 1px; }
+
+/* ---------- Photo carousel (lightbox) ---------- */
+.lightbox {
+  position: fixed; inset: 0; background: var(--background); z-index: 100; display: flex; flex-direction: column;
+}
+.lightbox-topbar { display: flex; align-items: center; padding: 10px 12px; border-bottom: 1px solid var(--border); }
+.lightbox-topbar .btn { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 22px; }
+.lightbox-topbar-center { flex: 1; text-align: center; }
+.lightbox-topbar-center .t { font-size: 16px; font-weight: 700; }
+.lightbox-topbar-center .s { font-size: 12px; font-style: italic; color: var(--muted-foreground); }
+.lightbox-image-wrap { flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 8px; }
+.lightbox-image-wrap img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.lightbox-controls { display: flex; align-items: center; justify-content: center; gap: 28px; padding: 14px 16px 24px; border-top: 1px solid var(--border); }
+.lightbox-controls button { width: 52px; height: 52px; border-radius: 26px; background: var(--muted); display: flex; align-items: center; justify-content: center; font-size: 22px; }
+.lightbox-controls button:disabled { opacity: 0.35; cursor: default; }
+.lightbox-counter { font-size: 14px; font-weight: 600; min-width: 56px; text-align: center; color: var(--muted-foreground); }
+
+/* ---------- Distribution map ---------- */
+.map-screen { display: flex; flex-direction: column; height: 100vh; }
+.map-banner {
+  margin: 14px 16px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--muted);
+  display: flex; align-items: center; gap: 8px; font-size: 14px;
+}
+.map-banner .dot { width: 10px; height: 10px; border-radius: 5px; }
+.map-svg-wrap { flex: 1; display: flex; align-items: center; justify-content: center; overflow: auto; padding: 0 16px; }
+.map-legend { display: flex; align-items: center; justify-content: center; gap: 24px; padding: 12px 16px 24px; }
+.map-legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted-foreground); }
+.map-legend-item .swatch { width: 14px; height: 14px; border-radius: 4px; }
+.chile-region-path { cursor: pointer; transition: opacity 0.15s; }
+.chile-region-path:hover { opacity: 0.8; }
+
+/* ---------- utility ---------- */
+.loading-spinner {
+  display: inline-block; width: 20px; height: 20px; border: 2px solid var(--muted); border-top-color: var(--primary);
+  border-radius: 50%; animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.skeleton { background: var(--muted); }
