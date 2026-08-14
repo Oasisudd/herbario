@@ -99,20 +99,26 @@ function screen(html) {
   $app.innerHTML = html;
 }
 
-function bottomNavHtml(active) {
+function bottomNavHtml(active, opts) {
+  const detailOnly = opts && opts.detailOnly;
   const items = [
     { key: "inicio", href: "#/", icon: ICONS.home, label: "Inicio" },
     { key: "especies", href: "#/catalogo", icon: ICONS.leaf, label: "Especies" },
     { key: "paisajes", href: "#/paisajes", icon: ICONS.earth, label: "Paisajes" },
   ];
-  return `<nav class="bottom-nav">
-    ${items
-      .map(
-        (it) => `<a class="bottom-nav-item ${it.key === active ? "active" : ""}" href="${it.href}">
-          <span class="nav-icon">${it.icon}</span><span>${it.label}</span>
-        </a>`
-      )
-      .join("")}
+  return `<nav class="bottom-nav${detailOnly ? " nav-desktop-only" : ""}">
+    <a class="bottom-nav-brand logo-link" href="https://oasisudd.github.io/observatorio/index3.html" target="_blank" rel="noopener">
+      <img src="assets/oasis-logo.png" alt="OASIS">
+    </a>
+    <div class="bottom-nav-items">
+      ${items
+        .map(
+          (it) => `<a class="bottom-nav-item ${it.key === active ? "active" : ""}" href="${it.href}">
+            <span class="nav-icon">${it.icon}</span><span>${it.label}</span>
+          </a>`
+        )
+        .join("")}
+    </div>
   </nav>`;
 }
 
@@ -308,72 +314,78 @@ function renderSpeciesDetail(species, activeTab) {
       <div class="icon-box">${ICONS.leaf}</div>
     </div>
 
-    <div class="hero-section">
-      ${species.commonName ? `<span class="common-tag">${esc(species.commonName)}</span>` : ""}
-      <h1 class="hero-name">${esc(species.scientificName)}</h1>
-      ${species.authority ? `<p class="hero-authority">${esc(species.authority)}</p>` : ""}
+    <div class="detail-grid">
+      <div class="detail-media">
+        ${
+          principalPhotos && principalPhotos.images.length
+            ? `<a class="hero-photo-wrap" href="#/species/${species.id}/photos/principal">
+                <img src="${principalPhotos.images[0]}" alt="${esc(species.scientificName)}">
+                ${principalPhotos.images.length > 1 ? `<div class="photo-count-badge">${ICONS.images}${principalPhotos.images.length}</div>` : ""}
+              </a>`
+            : ""
+        }
+        <div class="photos-section"><div class="photos-row">${photosHtml}</div></div>
+      </div>
 
-      ${
-        principalPhotos && principalPhotos.images.length
-          ? `<a class="hero-photo-wrap" href="#/species/${species.id}/photos/principal">
-              <img src="${principalPhotos.images[0]}" alt="${esc(species.scientificName)}">
-              ${principalPhotos.images.length > 1 ? `<div class="photo-count-badge">${ICONS.images}${principalPhotos.images.length}</div>` : ""}
-            </a>`
-          : ""
-      }
+      <div class="detail-info">
+        <div class="hero-section">
+          ${species.commonName ? `<span class="common-tag">${esc(species.commonName)}</span>` : ""}
+          <h1 class="hero-name">${esc(species.scientificName)}</h1>
+          ${species.authority ? `<p class="hero-authority">${esc(species.authority)}</p>` : ""}
 
-      ${
-        species.altitude
-          ? `<div class="hero-badges"><div class="hero-badge">${ICONS.trendUp}<span>${esc(species.altitude)}</span></div></div>`
-          : ""
-      }
+          ${
+            species.altitude
+              ? `<div class="hero-badges"><div class="hero-badge">${ICONS.trendUp}<span>${esc(species.altitude)}</span></div></div>`
+              : ""
+          }
 
-      ${
-        species.distribution.length
-          ? `<a class="distribution-block" href="#/species/${species.id}/map" style="display:block">
-              <div class="distribution-label-row">
-                <span class="distribution-label">Distribución regional</span>
-                <span class="distribution-link">${ICONS.map}Ver mapa</span>
-              </div>
-              <div class="distribution-chips">${species.distribution.map((r) => `<span class="dist-chip">${esc(r)}</span>`).join("")}</div>
-            </a>`
-          : ""
-      }
+          ${
+            species.distribution.length
+              ? `<a class="distribution-block" href="#/species/${species.id}/map" style="display:block">
+                  <div class="distribution-label-row">
+                    <span class="distribution-label">Distribución regional</span>
+                    <span class="distribution-link">${ICONS.map}Ver mapa</span>
+                  </div>
+                  <div class="distribution-chips">${species.distribution.map((r) => `<span class="dist-chip">${esc(r)}</span>`).join("")}</div>
+                </a>`
+              : ""
+          }
 
-      ${
-        speciesPaisajes.length
-          ? `<div class="paisajes-block">
-              <p class="paisajes-label">${speciesPaisajes.length > 1 ? "Paisajes" : "Paisaje"}</p>
-              <div class="paisajes-row">
-                ${speciesPaisajes
-                  .map(
-                    (p) => `<a class="paisaje-chip" href="#/paisajes/${p.id}" style="background:${p.color}1A;border-color:${p.color}40;color:${p.color}">
-                      ${paisajeIcon(p.id)}<span>${esc(p.shortName)}</span>${ICONS.chevronRight}
-                    </a>`
-                  )
-                  .join("")}
-              </div>
-            </div>`
-          : ""
-      }
+          ${
+            speciesPaisajes.length
+              ? `<div class="paisajes-block">
+                  <p class="paisajes-label">${speciesPaisajes.length > 1 ? "Paisajes" : "Paisaje"}</p>
+                  <div class="paisajes-row">
+                    ${speciesPaisajes
+                      .map(
+                        (p) => `<a class="paisaje-chip" href="#/paisajes/${p.id}" style="background:${p.color}1A;border-color:${p.color}40;color:${p.color}">
+                          ${paisajeIcon(p.id)}<span>${esc(p.shortName)}</span>${ICONS.chevronRight}
+                        </a>`
+                      )
+                      .join("")}
+                  </div>
+                </div>`
+              : ""
+          }
+        </div>
+
+        <div class="tab-bar">
+          ${TABS.map((t) => `<button class="tab-item ${t === activeTab ? "active" : ""}" data-tab="${t}">${t}</button>`).join("")}
+        </div>
+
+        <div class="tab-content" id="tab-content"></div>
+
+        ${
+          species.sourceUrl
+            ? `<a class="ficha-link" href="${species.sourceUrl}" target="_blank" rel="noopener">
+                ${ICONS.openOutline}<span>Ver ficha en Herbario Digital</span><span class="chevron">${ICONS.chevronRight}</span>
+              </a>`
+            : ""
+        }
+      </div>
     </div>
-
-    <div class="photos-section"><div class="photos-row">${photosHtml}</div></div>
-
-    <div class="tab-bar">
-      ${TABS.map((t) => `<button class="tab-item ${t === activeTab ? "active" : ""}" data-tab="${t}">${t}</button>`).join("")}
-    </div>
-
-    <div class="tab-content" id="tab-content"></div>
-
-    ${
-      species.sourceUrl
-        ? `<a class="ficha-link" href="${species.sourceUrl}" target="_blank" rel="noopener">
-            ${ICONS.openOutline}<span>Ver ficha en Herbario Digital</span><span class="chevron">${ICONS.chevronRight}</span>
-          </a>`
-        : ""
-    }
     <div style="height:24px"></div>
+    ${bottomNavHtml("especies", { detailOnly: true })}
   `);
 
   renderSpeciesTab(species, activeTab);
@@ -645,15 +657,30 @@ route("/paisajes/:id", ({ id }) => {
       <div class="topbar-center"><p class="topbar-sub">${esc(paisaje.shortName)}</p></div>
       <div class="icon-box" style="background:${paisaje.color}1A;color:${paisaje.color}">${paisajeIcon(paisaje.id)}</div>
     </div>
-    <img class="paisaje-hero" src="${paisaje.images[0]}" alt="${esc(paisaje.name)}">
-    <div class="paisaje-body">
-      <span class="title-tag" style="background:${paisaje.color}1A;color:${paisaje.color}">${paisajeIcon(paisaje.id)}${esc(paisaje.shortName)}</span>
-      <h1>${esc(paisaje.name)}</h1>
-      <p class="paisaje-tagline">${esc(paisaje.tagline)}</p>
-      ${paisaje.description.map((p) => `<p class="para">${esc(p)}</p>`).join("")}
-      ${subtypesHtml}
-      ${galleryHtml}
-      ${speciesHtml}
+    <div class="detail-grid">
+      <div class="detail-media">
+        <img class="paisaje-hero" src="${paisaje.images[0]}" alt="${esc(paisaje.name)}">
+        ${
+          paisaje.images.length > 1
+            ? `<div class="gallery-section">
+                <p class="section-title" style="color:${paisaje.color};padding:0 20px">Galería</p>
+                <div class="gallery-row">${paisaje.images.map((img) => `<img src="${img}" loading="lazy" alt="${esc(paisaje.name)}">`).join("")}</div>
+              </div>`
+            : ""
+        }
+      </div>
+      <div class="detail-info">
+        <div class="paisaje-body">
+          <span class="title-tag" style="background:${paisaje.color}1A;color:${paisaje.color}">${paisajeIcon(paisaje.id)}${esc(paisaje.shortName)}</span>
+          <h1>${esc(paisaje.name)}</h1>
+          <p class="paisaje-tagline">${esc(paisaje.tagline)}</p>
+          ${paisaje.description.map((p) => `<p class="para">${esc(p)}</p>`).join("")}
+          ${subtypesHtml}
+          ${speciesHtml}
+        </div>
+      </div>
     </div>
+    <div style="height:24px"></div>
+    ${bottomNavHtml("paisajes", { detailOnly: true })}
   `);
 });
