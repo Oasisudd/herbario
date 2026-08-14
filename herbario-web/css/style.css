@@ -55,9 +55,10 @@ button {
   flex-direction: column;
 }
 
-@media (min-width: 760px) {
+@media (min-width: 900px) {
+  :root { --maxw: 1240px; }
   body { background: #eef0f2; }
-  #app { min-height: 100vh; }
+  #app { box-shadow: 0 0 60px rgba(0,0,0,0.08); }
 }
 
 /* ---------- Header / topbar ---------- */
@@ -408,6 +409,7 @@ button {
   left: 0;
   right: 0;
   display: flex;
+  align-items: center;
   border-top: 1px solid var(--border);
   background: var(--background);
   z-index: 30;
@@ -415,6 +417,9 @@ button {
   margin-top: auto;
   flex-shrink: 0;
 }
+.bottom-nav-brand { display: none; }
+.bottom-nav-items { display: flex; flex: 1; }
+.nav-desktop-only { display: none; }
 .bottom-nav-item {
   flex: 1;
   display: flex;
@@ -447,6 +452,35 @@ button {
 .bottom-nav-item .nav-icon { font-size: 20px; line-height: 1; display: flex; }
 .has-bottom-nav { padding-bottom: 0; }
 
+@media (min-width: 900px) {
+  .bottom-nav {
+    order: -1;
+    position: sticky;
+    top: 0;
+    bottom: auto;
+    border-top: none;
+    border-bottom: 1px solid var(--border);
+    padding: 4px 32px;
+    gap: 40px;
+    height: 64px;
+    z-index: 32;
+  }
+  .nav-desktop-only { display: flex; }
+  .bottom-nav-brand { display: flex; align-items: center; }
+  .bottom-nav-brand img { height: 22px; width: auto; }
+  .bottom-nav-items { flex: none; gap: 8px; }
+  .bottom-nav-item {
+    flex: none;
+    flex-direction: row;
+    gap: 8px;
+    padding: 22px 6px;
+  }
+  .bottom-nav-item::after { left: 0; width: 100%; height: 3px; }
+  .bottom-nav-item .nav-icon { font-size: 17px; }
+  .bottom-nav-item .nav-icon svg { width: 17px; height: 17px; }
+  .bottom-nav-item span:last-child { font-size: 12.5px; }
+}
+
 /* ---------- utility ---------- */
 .loading-spinner {
   display: inline-block; width: 20px; height: 20px; border: 2px solid var(--muted); border-top-color: var(--primary);
@@ -454,3 +488,71 @@ button {
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 .skeleton { background: var(--muted); }
+
+/* ==================================================================
+   Desktop layout overrides — grids, two-column detail pages, spacing
+   ================================================================== */
+@media (min-width: 900px) {
+  /* Species catalog: multi-column grid instead of a stacked list */
+  .topbar { top: 64px; min-height: 70px; }
+  .catalog-header { padding: 26px 40px 18px; }
+  .catalog-header .oasis-logo { display: none; } /* brand now lives in the top nav */
+  .search-wrap { padding: 14px 40px; }
+  .search-bar { max-width: 420px; }
+  .species-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 20px 40px 48px;
+  }
+  .species-card .card-image { height: 180px; }
+  .species-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.08); border-color: transparent; transition: box-shadow 0.2s ease; }
+
+  /* Paisajes list: grid of cards */
+  .paisajes-intro { padding: 0 40px; max-width: 760px; }
+  .paisajes-intro img { height: 220px; }
+  .paisajes-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+    padding: 20px 40px 48px;
+  }
+  .paisaje-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.08); transition: box-shadow 0.2s ease; }
+
+  /* Intro / home screen */
+  .intro-header { padding: 56px 56px 24px; text-align: left; }
+  .intro-header .logo-link { display: none; } /* brand now lives in the top nav */
+  .pano-wrap { max-width: none; margin: 0 56px; width: calc(100% - 112px); border-radius: 16px; aspect-ratio: 16/6; }
+  .intro-body { padding: 32px 56px 0; max-width: 760px; }
+  .intro-body .nav-button { max-width: 480px; }
+  .footer { padding: 40px 56px 48px; }
+
+  /* Species & Paisaje detail: two-column layout with sticky media */
+  .detail-grid {
+    display: grid;
+    grid-template-columns: minmax(320px, 460px) 1fr;
+    gap: 40px;
+    align-items: start;
+    padding: 28px 40px 0;
+  }
+  .detail-media { position: sticky; top: 148px; display: flex; flex-direction: column; gap: 14px; }
+  .detail-info { min-width: 0; }
+  .detail-info .hero-section { padding: 0 0 20px; border-bottom: none; }
+  .detail-info .tab-content, .detail-info .tab-bar { padding-left: 0; padding-right: 0; margin-left: 0; margin-right: 0; }
+  .hero-photo-wrap img { aspect-ratio: 4/3; }
+  .photos-section { margin: 0; overflow-x: visible; }
+  .photos-row { flex-wrap: wrap; padding: 0; }
+  .photo-card { width: calc(50% - 6px); }
+  .ficha-link { margin: 8px 0 0; }
+
+  .paisaje-hero { border-radius: 14px; height: 320px; }
+  .gallery-section { margin: 0; }
+  .gallery-row { padding: 0; flex-wrap: wrap; overflow-x: visible; }
+  .gallery-row img { width: calc(50% - 6px); height: 150px; }
+  .paisaje-body { padding: 0 0 20px; }
+}
+
+@media (min-width: 1200px) {
+  .species-list { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+  .detail-grid { grid-template-columns: minmax(360px, 520px) 1fr; gap: 56px; padding: 32px 56px 0; }
+}
